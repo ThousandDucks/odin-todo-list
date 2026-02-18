@@ -1,0 +1,127 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr;
+    font-family: lato;
+    color: #333232;
+}
+
+#sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: #fcde9c;
+  padding: 15px 30px;
+}
+
+#task-workspace {
+    background-color: #dddbf1;
+    padding: 50px 100px; 
+}
+
+#sidebar div {
+    padding-bottom: 25px;
+    font-size: 20px;
+}
+
+#project-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.project-item {
+  display: flex;
+  align-items: center; 
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.5s ease-in-out;
+}
+
+.project-item:hover {
+    color: black;
+}
+
+.project-item svg {
+  display: block;        
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;        
+  fill: currentColor;
+}
+
+#create-project {
+    font-weight: bold;
+}
+
+#notepage {
+  background-color: #fcfbe3;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.08);
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 88%, 97% 91%, 94% 87%, 90% 92%, 85% 88%, 80% 91%, 
+    75% 87%, 70% 92%, 65% 88%, 60% 91%, 55% 87%, 50% 92%, 45% 88%, 40% 91%, 
+    35% 87%, 30% 92%, 25% 88%, 20% 91%, 15% 87%, 10% 92%, 5% 88%, 0% 91%
+  );
+  padding: 0; 
+}
+
+#notepad-header {
+  padding: 20px 30px;
+  font-size: 32px; 
+  font-weight: bold;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  background: #fcfbe3;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#notepad-body {
+  padding: 5px 30px 50px 30px; 
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.05) 0px,
+    rgba(0,0,0,0.05) 1px,
+    transparent 1px,
+    transparent 35px      
+  );
+}
+
+.todo-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 22px;       
+  line-height: 35px;     
+  margin-bottom: 5px;
+}
+
+.todo-row button {
+  background-color: transparent;
+}
+#todo-items {
+  list-style: none;      
+  padding: 0;            
+  margin: 0;
+}
+
+#todo-items li {
+  position: relative;    
+  line-height: 35px;     
+  font-size: 18px;       
+  margin: 0 0 0px 0;     
+  padding-left: 20px;   
+}
+
+#todo-items li::before {
+  content: '•';          
+  position: absolute;
+  left: 0;               
+  top: 0;
+  font-size: 18px;       
+  line-height: 35px;     
+  color: #333;           
+}
