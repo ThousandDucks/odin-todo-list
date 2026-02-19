@@ -17,8 +17,14 @@ body {
 }
 
 #task-workspace {
-    background-color: #dddbf1;
-    padding: 50px 100px; 
+  background-color: #dddbf1;
+  display: flex;
+  gap: 40px;               /* space between notepage and form */
+  align-items: flex-start;
+  padding: 50px;           /* reduced padding so it fits */
+  box-sizing: border-box;  /* includes padding in width */
+  width: 100%;
+  overflow-x: hidden;      /* prevent horizontal scroll */
 }
 
 #sidebar div {
@@ -67,6 +73,8 @@ body {
     35% 87%, 30% 92%, 25% 88%, 20% 91%, 15% 87%, 10% 92%, 5% 88%, 0% 91%
   );
   padding: 0; 
+  flex: 2 1 0;      
+  min-width: 300px;  
 }
 
 #notepad-header {
@@ -92,7 +100,7 @@ body {
 
 .todo-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
   font-size: 22px;       
   line-height: 35px;     
@@ -124,4 +132,79 @@ body {
   font-size: 18px;       
   line-height: 35px;     
   color: #333;           
+}
+
+.todo-row svg {
+  width: 20px;
+  height: 20px;
+  transform: translateY(2px);
+  fill: currentColor;
+  cursor: pointer;
+}
+
+#task-form {
+  flex: 1 1 0;
+  min-width: 200px;
+  background-color: #fcfbe3;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 20px;
+  overflow-y: auto;       
+  max-height: 80%;     
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 80%;
+}
+
+#task-desc {
+  resize: none;          
+  overflow: hidden;      
+  line-height: 1.5em;
+  min-height: 50px;      
+  box-sizing: border-box;
+}
+
+#task-title {
+  cursor: text;
+  outline: none;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding-bottom: 4px;
+  font-size: 20px;
+}
+
+input:focus,
+textarea:focus,
+[contenteditable]:focus {
+  outline: none;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+}
+
+#task-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+
+#task-details{ 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.task-details input[type="text"],
+.task-details textarea,
+.task-details select {
+  width: 100%;
+  background-color: #fcfbe3; 
+  border: none; 
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  box-sizing: border-box;
 }
