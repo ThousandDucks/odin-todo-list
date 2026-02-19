@@ -16,17 +16,6 @@ body {
   padding: 15px 30px;
 }
 
-#task-workspace {
-  background-color: #dddbf1;
-  display: flex;
-  gap: 40px;               /* space between notepage and form */
-  align-items: flex-start;
-  padding: 50px;           /* reduced padding so it fits */
-  box-sizing: border-box;  /* includes padding in width */
-  width: 100%;
-  overflow-x: hidden;      /* prevent horizontal scroll */
-}
-
 #sidebar div {
     padding-bottom: 25px;
     font-size: 20px;
@@ -62,19 +51,33 @@ body {
     font-weight: bold;
 }
 
+#task-workspace {
+  background-color: #dddbf1;
+  display: flex;
+  gap: 40px;               
+  align-items: flex-start;
+  padding: 50px;           
+  box-sizing: border-box;  
+  width: 100%;
+  overflow-x: hidden;      
+}
+
 #notepage {
   background-color: #fcfbe3;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   border: 1px solid rgba(0,0,0,0.08);
+  max-height: 80vh;    
+  overflow-y: auto;
   clip-path: polygon(
     0% 0%, 100% 0%, 100% 88%, 97% 91%, 94% 87%, 90% 92%, 85% 88%, 80% 91%, 
     75% 87%, 70% 92%, 65% 88%, 60% 91%, 55% 87%, 50% 92%, 45% 88%, 40% 91%, 
     35% 87%, 30% 92%, 25% 88%, 20% 91%, 15% 87%, 10% 92%, 5% 88%, 0% 91%
   );
-  padding: 0; 
+  
   flex: 2 1 0;      
-  min-width: 300px;  
+  min-width: 300px;           
+  padding-bottom: 50px;
 }
 
 #notepad-header {
@@ -85,6 +88,7 @@ body {
   background: #fcfbe3;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  flex-shrink: 0;
 }
 
 #notepad-body {
@@ -95,21 +99,45 @@ body {
     rgba(0,0,0,0.05) 1px,
     transparent 1px,
     transparent 35px      
-  );
+  );   
 }
 
 .todo-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 22px;       
-  line-height: 35px;     
-  margin-bottom: 5px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.todo-row button {
-  background-color: transparent;
+.todo-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  margin-top: -4px;
+
+  height: 35px;
+  line-height: 10px;
+  font-size: 18px;
+  padding: 0 2px;
+
+  font-family: 'Lato', sans-serif;
+  color: #333232;
 }
+
+.todo-row input::placeholder {
+  color: rgba(0,0,0,0.35);
+}
+
+.todo-row input:focus {
+  border-bottom: 2px solid rgba(0,0,0,0.35);
+}
+
+.todo-row svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+
 #todo-items {
   list-style: none;      
   padding: 0;            
@@ -207,4 +235,11 @@ textarea:focus,
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   box-sizing: border-box;
+}
+
+#task-form img {
+  width: 60px;
+  height: 40px;
+  display: block;
+  margin: 0 auto;
 }
