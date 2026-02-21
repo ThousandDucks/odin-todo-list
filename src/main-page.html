@@ -7,8 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="main-style.css">
-    <script src="project-list.js" defer></script>
 </head>
 <body>
     <div id="sidebar">
@@ -38,11 +36,6 @@
                         <svg id="task-adder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" /></svg>                    
                     </div>
                     <ul id="todo-items">
-                        <li>Go on a walk.</li>
-                        <li>Find Bob.</li>
-                        <li>cat</li>
-                        <li>dog</li>
-                        <li>dog</li>
                     </ul>
                 </div>
             </div>
@@ -52,21 +45,15 @@
             <div id="drawing-pin">
                 <img src="../images/drawing-pin.svg">
             </div>
-            <h1 id="task-title" contenteditable="true">Go on a walk</h1>
+            <h1 id="task-title" contenteditable="true"></h1>
             <div id="task-details">
                 <div id="task-status">
-                    <div>
-                        <label for="checkbox">Completed:</label>
-                        <input type="checkbox" id="checkbox" name="checkbox" value="completed">
-                    </div>
-                    <div>
-                        <label for="priority">Priority:</label>
-                        <select id="priority" name="priority">
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        </select>
-                    </div>
+                    <label for="priority">Priority:</label>
+                    <select id="priority" name="priority">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    </select>
                 </div>
                 
                 <div id="due-date" class="task-details">

@@ -132,11 +132,12 @@ body {
   border-bottom: 2px solid rgba(0,0,0,0.35);
 }
 
-.todo-row svg {
+.todo-row svg, .list-item svg {
   width: 20px !important;
   height: 20px !important;
+  fill: currentColor;
+  cursor: pointer;
 }
-
 
 #todo-items {
   list-style: none;      
@@ -163,11 +164,7 @@ body {
 }
 
 .todo-row svg {
-  width: 20px;
-  height: 20px;
   transform: translateY(2px);
-  fill: currentColor;
-  cursor: pointer;
 }
 
 #task-form {
@@ -213,13 +210,6 @@ textarea:focus,
   flex-direction: column;
 }
 
-#task-status {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  align-items: center;
-}
-
 #task-details{ 
   display: flex;
   flex-direction: column;
@@ -242,4 +232,19 @@ textarea:focus,
   height: 40px;
   display: block;
   margin: 0 auto;
+}
+
+.list-item-left {
+  display: flex;
+  gap: 10px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.list-item-left li {
+  cursor: pointer;
 }
