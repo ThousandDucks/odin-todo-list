@@ -51,6 +51,7 @@ class TaskList {
       if (e.key === "Enter") this.handleAddTask();
     });
 
+
     [this.titleField, this.descField, this.priorityField, this.dueDateField].forEach(field => {
       field.addEventListener("input", () => this.updateSelectedTask());
     });
@@ -61,16 +62,44 @@ class TaskList {
     if (!text) return;
 
     // Creates index here to allow for task tracking
-    const task = new Task({
-      title: text,
-      dueDate: this.dateInput ? this.dateInput.value : "",
-    });
+     const task = new Task({
+        title: text,
+        description: this.descField.value,  
+        priority: this.priorityField.value,  
+        dueDate: this.dateInput ? this.dateInput.value : "",
+      });
 
     this.tasks.push(task);
     this.addTaskToDOM(task, this.tasks.length - 1);
 
     this.input.value = "";
     if (this.dateInput) this.dateInput.value = "";
+  }
+  
+  handleDeleteTask(index) {
+  this.tasks.splice(index, 1);
+
+  if (this.selectedTaskIndex !== null) {
+    if (this.selectedTaskIndex === index) {
+      this.selectedTaskIndex = null;
+      this.clearDetailsPanel();
+    } else if (this.selectedTaskIndex > index) {
+      this.selectedTaskIndex--;
+    }
+  }
+
+  this.refreshList();
+}
+
+  refreshList() {
+    this.list.innerHTML = "";
+    this.tasks.forEach((task, i) => this.addTaskToDOM(task, i));
+  }
+  clearDetailsPanel() {
+    this.titleField.value = "";
+    this.descField.value = "";
+    this.priorityField.value = "low";
+    this.dueDateField.value = "";
   }
 
   addTaskToDOM(task, index) {
@@ -116,6 +145,9 @@ class TaskList {
       "M17,13H7V11H17M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"
     );
     svg.appendChild(path);
+    svg.classList.add("task-deleter");
+
+    svg.addEventListener("click", () => this.handleDeleteTask(index));
 
     listItem.appendChild(leftDiv);
     listItem.appendChild(svg);
@@ -127,14 +159,14 @@ class TaskList {
   }
 
   selectTask(index) {
-    const task = this.tasks[index];
-    this.selectedTaskIndex = index;
+  const task = this.tasks[index];
+  this.selectedTaskIndex = index;
 
-    this.titleField.textContent = task.title;
-    this.descField.value = task.description;
-    this.priorityField.value = task.priority;
-    this.dueDateField.value = task.dueDate;
-  }
+  this.titleField.textContent = task.title;
+  this.descField.value = task.description;
+  this.priorityField.value = task.priority;
+  this.dueDateField.value = task.dueDate;
+}
 
   // takes DOM values and updates the task object
   updateSelectedTask() {
@@ -142,7 +174,7 @@ class TaskList {
 
     const task = this.tasks[this.selectedTaskIndex];
 
-    task.title = this.titleField.textContent || this.titleField.value;
+    task.title = this.titleField.textContent;
     task.description = this.descField.value;
     task.priority = this.priorityField.value;
     task.dueDate = this.dueDateField.value;
@@ -150,7 +182,7 @@ class TaskList {
     // Update DOM task text and due date
     const listItem = this.list.children[this.selectedTaskIndex];
     const liText = listItem.querySelector("li");
-    liText.textContent = task.title;
+    liText.firstChild.nodeValue = task.title;
 
     // Accesses span in <li>
     const dueSpan = liText.querySelector(".due-date-text");
@@ -186,7 +218,7 @@ class TodoApp {
     this.taskList = new TaskList(
       this.list,
       this.taskInput,
-      this.taskAdder,
+      this.taskAdder,  
       this.dueDateInput
     );
 
