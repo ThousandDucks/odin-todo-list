@@ -1,6 +1,4 @@
 import { dateHandler } from "../src/date-handling.js"
-import "./main-style.css";
-
 
 // Handles textarea expansion
 class FormExpander {
@@ -61,16 +59,19 @@ class TaskList {
     const text = this.input.value.trim();
     if (!text) return;
 
-    // Creates index here to allow for task tracking
-     const task = new Task({
-        title: text,
-        description: this.descField.value,  
-        priority: this.priorityField.value,  
-        dueDate: this.dateInput ? this.dateInput.value : "",
-      });
+    const task = new Task({
+      title: text,
+      description: "",
+      priority: "low",
+      dueDate: "",
+    });
 
     this.tasks.push(task);
-    this.addTaskToDOM(task, this.tasks.length - 1);
+
+    this.refreshList();
+
+    const newIndex = this.tasks.length - 1;
+    this.selectTask(newIndex);
 
     this.input.value = "";
     if (this.dateInput) this.dateInput.value = "";
@@ -89,14 +90,15 @@ class TaskList {
   }
 
   this.refreshList();
-}
+  }
 
   refreshList() {
     this.list.innerHTML = "";
     this.tasks.forEach((task, i) => this.addTaskToDOM(task, i));
   }
+
   clearDetailsPanel() {
-    this.titleField.value = "";
+    this.titleField.textContent = "";
     this.descField.value = "";
     this.priorityField.value = "low";
     this.dueDateField.value = "";
@@ -232,13 +234,5 @@ class TodoApp {
   }
 }
 
-// Runs the script
-document.addEventListener("DOMContentLoaded", () => {
-  new TodoApp({
-    taskInputId: "task-input",
-    addButtonId: "task-adder",
-    listId: "todo-items",
-    dueDateId: "task-due-date",
-    descriptionId: "task-desc"
-  });
-});
+export { TaskList };
+export { TodoApp };
