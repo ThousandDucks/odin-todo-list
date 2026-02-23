@@ -1,6 +1,6 @@
-import { dateHandler } from "../src/date-handling.js"
+import { dateHandler } from "../src/date-handling.js";
 
-// Handles textarea expansion
+// --- Handles auto-expanding description textarea ---
 class FormExpander {
   constructor(textarea) {
     this.textarea = textarea;
@@ -17,7 +17,7 @@ class FormExpander {
   }
 }
 
-// Initialising Task object
+// --- Task object ---
 class Task {
   constructor({ title, description = "", priority = "low", dueDate = "", completed = false }) {
     this.title = title;
@@ -28,28 +28,30 @@ class Task {
   }
 }
 
-// Class to deal with task interactions
+// --- Manages task interactions ---
 class TaskList {
-  constructor(listElement, inputElement, addButton, dateInput) {
+  constructor(listElement, inputElement, addButton, dateInput, projectRef = null) {
     this.list = listElement;
     this.input = inputElement;
     this.addButton = addButton;
     this.dateInput = dateInput;
 
-    this.tasks = [];              
+    this.tasks = [];
     this.selectedTaskIndex = null;
+    this.projectRef = projectRef; // set by Project.selectProject
 
     this.titleField = document.getElementById("task-title");
     this.descField = document.getElementById("task-desc");
     this.priorityField = document.getElementById("priority");
     this.dueDateField = document.getElementById("task-due-date");
 
+    // Add task button
     this.addButton.addEventListener("click", () => this.handleAddTask());
-    this.input.addEventListener("keydown", (e) => {
+    this.input.addEventListener("keydown", e => {
       if (e.key === "Enter") this.handleAddTask();
     });
 
-
+    // Update task on input
     [this.titleField, this.descField, this.priorityField, this.dueDateField].forEach(field => {
       field.addEventListener("input", () => this.updateSelectedTask());
     });
@@ -59,37 +61,34 @@ class TaskList {
     const text = this.input.value.trim();
     if (!text) return;
 
-    const task = new Task({
-      title: text,
-      description: "",
-      priority: "low",
-      dueDate: "",
-    });
-
+    const task = new Task({ title: text });
     this.tasks.push(task);
 
-    this.refreshList();
+    // Save to project
+    this.syncTasksToProject();
 
+    this.refreshList();
     const newIndex = this.tasks.length - 1;
     this.selectTask(newIndex);
 
     this.input.value = "";
     if (this.dateInput) this.dateInput.value = "";
   }
-  
+
   handleDeleteTask(index) {
-  this.tasks.splice(index, 1);
+    this.tasks.splice(index, 1);
 
-  if (this.selectedTaskIndex !== null) {
-    if (this.selectedTaskIndex === index) {
-      this.selectedTaskIndex = null;
-      this.clearDetailsPanel();
-    } else if (this.selectedTaskIndex > index) {
-      this.selectedTaskIndex--;
+    if (this.selectedTaskIndex !== null) {
+      if (this.selectedTaskIndex === index) {
+        this.selectedTaskIndex = null;
+        this.clearDetailsPanel();
+      } else if (this.selectedTaskIndex > index) {
+        this.selectedTaskIndex--;
+      }
     }
-  }
 
-  this.refreshList();
+    this.syncTasksToProject();
+    this.refreshList();
   }
 
   refreshList() {
@@ -121,12 +120,12 @@ class TaskList {
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
       listItem.classList.toggle("completed", task.completed);
+      this.syncTasksToProject();
     });
 
     leftDiv.appendChild(li);
     leftDiv.appendChild(checkbox);
 
-    // Adding due date
     if (task.dueDate) {
       const dateObj = new dateHandler(task.dueDate);
       const dueString = dateObj.dueDateString();
@@ -148,45 +147,40 @@ class TaskList {
     );
     svg.appendChild(path);
     svg.classList.add("task-deleter");
-
     svg.addEventListener("click", () => this.handleDeleteTask(index));
 
     listItem.appendChild(leftDiv);
     listItem.appendChild(svg);
 
-    // The event listener store index for each task and calls upon it.
     li.addEventListener("click", () => this.selectTask(index));
 
     this.list.appendChild(listItem);
   }
 
   selectTask(index) {
-  const task = this.tasks[index];
-  this.selectedTaskIndex = index;
+    const task = this.tasks[index];
+    if (!task) return;
 
-  this.titleField.textContent = task.title;
-  this.descField.value = task.description;
-  this.priorityField.value = task.priority;
-  this.dueDateField.value = task.dueDate;
-}
+    this.selectedTaskIndex = index;
+    this.titleField.textContent = task.title;
+    this.descField.value = task.description;
+    this.priorityField.value = task.priority;
+    this.dueDateField.value = task.dueDate;
+  }
 
-  // takes DOM values and updates the task object
   updateSelectedTask() {
     if (this.selectedTaskIndex === null) return;
 
     const task = this.tasks[this.selectedTaskIndex];
-
     task.title = this.titleField.textContent;
     task.description = this.descField.value;
     task.priority = this.priorityField.value;
     task.dueDate = this.dueDateField.value;
 
-    // Update DOM task text and due date
     const listItem = this.list.children[this.selectedTaskIndex];
     const liText = listItem.querySelector("li");
     liText.firstChild.nodeValue = task.title;
 
-    // Accesses span in <li>
     const dueSpan = liText.querySelector(".due-date-text");
     if (task.dueDate) {
       const dateObj = new dateHandler(task.dueDate);
@@ -203,10 +197,22 @@ class TaskList {
     } else if (dueSpan) {
       dueSpan.remove();
     }
+
+    this.syncTasksToProject();
+  }
+
+  // --- Synchronize tasks to parent project and save ---
+  syncTasksToProject() {
+    if (this.projectRef) {
+      this.projectRef.tasks = this.tasks;
+      if (this.projectRef.parent?.saveProjects) {
+        this.projectRef.parent.saveProjects();
+      }
+    }
   }
 }
 
-// Overall class to bundle everything
+// --- Bundles the app ---
 class TodoApp {
   constructor({ taskInputId, addButtonId, listId, dueDateId, descriptionId }) {
     this.taskInput = document.getElementById(taskInputId);
@@ -220,7 +226,7 @@ class TodoApp {
     this.taskList = new TaskList(
       this.list,
       this.taskInput,
-      this.taskAdder,  
+      this.taskAdder,
       this.dueDateInput
     );
 
@@ -230,9 +236,8 @@ class TodoApp {
   preventFormSubmit() {
     const form = document.getElementById("task-form");
     if (!form) return;
-    form.addEventListener("submit", (e) => e.preventDefault());
+    form.addEventListener("submit", e => e.preventDefault());
   }
 }
 
-export { TaskList };
-export { TodoApp };
+export { TaskList, TodoApp, Task };
