@@ -12,7 +12,7 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/main-page.html",
+      template: "./src/index.html",
     }),
   ],
   module: {
