@@ -1,6 +1,5 @@
 import { dateHandler } from "../src/date-handling.js";
 
-// --- Handles auto-expanding description textarea ---
 class FormExpander {
   constructor(textarea) {
     this.textarea = textarea;
@@ -17,7 +16,6 @@ class FormExpander {
   }
 }
 
-// --- Task object ---
 class Task {
   constructor({ title, description = "", priority = "low", dueDate = "", completed = false }) {
     this.title = title;
@@ -28,7 +26,6 @@ class Task {
   }
 }
 
-// --- Manages task interactions ---
 class TaskList {
   constructor(listElement, inputElement, addButton, dateInput, projectRef = null) {
     this.list = listElement;
@@ -38,20 +35,18 @@ class TaskList {
 
     this.tasks = [];
     this.selectedTaskIndex = null;
-    this.projectRef = projectRef; // set by Project.selectProject
+    this.projectRef = projectRef; 
 
     this.titleField = document.getElementById("task-title");
     this.descField = document.getElementById("task-desc");
     this.priorityField = document.getElementById("priority");
     this.dueDateField = document.getElementById("task-due-date");
 
-    // Add task button
     this.addButton.addEventListener("click", () => this.handleAddTask());
     this.input.addEventListener("keydown", e => {
       if (e.key === "Enter") this.handleAddTask();
     });
 
-    // Update task on input
     [this.titleField, this.descField, this.priorityField, this.dueDateField].forEach(field => {
       field.addEventListener("input", () => this.updateSelectedTask());
     });
@@ -64,7 +59,6 @@ class TaskList {
     const task = new Task({ title: text });
     this.tasks.push(task);
 
-    // Save to project
     this.syncTasksToProject();
 
     this.refreshList();
@@ -201,7 +195,6 @@ class TaskList {
     this.syncTasksToProject();
   }
 
-  // --- Synchronize tasks to parent project and save ---
   syncTasksToProject() {
     if (this.projectRef) {
       this.projectRef.tasks = this.tasks;
@@ -212,7 +205,6 @@ class TaskList {
   }
 }
 
-// --- Bundles the app ---
 class TodoApp {
   constructor({ taskInputId, addButtonId, listId, dueDateId, descriptionId }) {
     this.taskInput = document.getElementById(taskInputId);
